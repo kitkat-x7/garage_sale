@@ -14,6 +14,7 @@ const {verifyuser}=require("../../middlewares/verifyuser.js");
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");
 router.use(verifyuser);
 
+// /users/:username/sold
 router.get("/items",async (req,res)=>{
     try{
         const orderdata=await orderhistoryModel.find({
@@ -37,13 +38,17 @@ router.get("/items",async (req,res)=>{
     }
 });
 
+// /users/:username/sold/:soldId
 router.get("/items/:soldId",async (req,res)=>{
     const soldId=req.params.soldId;
     try{
         const product=await ProductModel.findOne({
             _id:soldId,
-            sellerId:req.userId,
+            sellerId:req.userId, // Is this required?
         });
+
+        // There should be a check that sellerId should be equal to current user id
+
         if(!product){
             return res.status(404).json({ message: "Item not found!"});
         }

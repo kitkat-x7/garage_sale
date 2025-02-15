@@ -15,6 +15,7 @@ mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb
 
 router.use(verifyuser);
 
+// /users/:username/profile
 router.get("/",async (req,res)=>{
     try{
         const profile=await UserModel.findById(req.userId);
@@ -38,6 +39,8 @@ router.get("/",async (req,res)=>{
 });
 
 
+// Email --> Should not be updated.
+// /users/:username/profile
 router.patch("/update",async (req,res)=>{
     const {email,firstname,lastname,address,phone_number}=req.body;
     try{
@@ -63,6 +66,7 @@ router.patch("/update",async (req,res)=>{
     }
 });
 
+// VerifyUser Middleware would not work.
 router.put("/forget-password",async (req,res)=>{
     //Will not use the email auth now
     const {password}=req.body;
@@ -90,6 +94,7 @@ router.put("/forget-password",async (req,res)=>{
 })
     
 
+// /users/:username/profile
 router.delete("/delete",async (req,res)=>{
     try{
         const profile=await UserModel.findByIdAndDelete(req.userId);

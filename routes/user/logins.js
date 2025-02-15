@@ -13,6 +13,10 @@ const {verifyuser}=require("../../middlewares/verifyuser.js");
 
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");
 
+
+// Is there a way to check if the req is valid or not
+// Check if there is a way to encapsulate the fields of the request in a class.
+// Not just for this route. For every route that makes an update/create.
 router.post("/signup",async (req,res)=>{
     const {email,password,firstname,lastname,address,phone_number}=req.body;
     if (!email || !password || !firstname || !lastname || !address || !phone_number) {
@@ -61,7 +65,7 @@ router.post("/signin",async (req,res)=>{
             const token=jwt.sign({
                 id:user._id,
             },JWT_SECRET,{expiresIn:"30m"});
-            const time = 300*60*1000;
+            const time = 300*60*1000; // 300m
             res.cookie("token", token, {
                 maxAge: time,
             });

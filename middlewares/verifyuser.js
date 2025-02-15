@@ -21,8 +21,10 @@ function verifyuser(req,res,next){
     }catch(err){
         console.error(err);
         if (err.name === "JsonWebTokenError") {
+            // Redirect to "/signin"
             res.status(401).json({ message: "Invalid Token! Please log in." });
         } else if (err.name === "TokenExpiredError") {
+            // Redirect to "/signin"
             res.status(401).json({ message: "Token Expired! Please login again." });
         } else {
             res.status(500).json({ message: "Server Error" });

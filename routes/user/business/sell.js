@@ -45,6 +45,8 @@ router.post("/add",async (req,res)=>{
 router.patch("/update",async (req,res)=>{
     const {category,name,amount,date}=req.body;
     try{
+        // Change to product model
+        // This is wrong. We need to correct this.
         const profile=await UserModel.findByIdAndUpdate(req.userId,{
             category,
             name,
