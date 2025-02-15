@@ -22,6 +22,7 @@ const User= new Schema({
         type:Number,
         required:true,
     }
+    // IsDeleted
 });
 
 const UserModel = mongoose.model("Users", User);

@@ -21,6 +21,11 @@ app.use("/:username/cart", cart);
 app.use("/:username/buy", buy);
 app.use("/:username/sell", sell);
 
+// REST
+
+
+
+
 app.get("/",(req,res)=>{
     res.json({
         message:"Home page"
