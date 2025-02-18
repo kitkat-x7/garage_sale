@@ -8,18 +8,18 @@ const buy = require("./routes/user/business/buy");
 const sell = require("./routes/user/business/sell");
 const cart = require("./routes/user/cart");
 const login = require("./routes/user/logins");
-const orders = require("./routes/user/orders");
+const orders = require("./routes/user/ordershistory");
 const profile = require("./routes/user/profile");
-const sold = require("./routes/user/sold");
+const sold = require("./routes/user/soldhistory");
 
 //no caps in url
 app.use("/user",login);
-app.use("/:username/orders", orders);
-app.use("/:username/sold", sold);
-app.use("/:username/profile", profile);
-app.use("/:username/cart", cart);
-app.use("/:username/buy", buy);
-app.use("/:username/sell", sell);
+app.use("/user/:username/orders", orders);
+app.use("/user/:username/sold", sold);
+app.use("/user/:username/profile", profile);
+app.use("/user/:username/cart", cart);
+app.use("/user/:username/buy", buy);
+app.use("/user/:username/sell", sell);
 
 // REST
 

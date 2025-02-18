@@ -11,9 +11,8 @@ const {CategoryModel}=require("../../database/category.js");
 const { ProductModel } = require('../../database/product.js');
 
 mongoose.connect("");
-
 // Categories --> "/categories"
-router.get("/category",async (req,res)=>{
+router.get("/categories",async (req,res)=>{
     try{
         const list=await CategoryModel.find();
         if(!list){
@@ -25,9 +24,8 @@ router.get("/category",async (req,res)=>{
         res.status(500).json({ message: "Internal Server Error", error: err.message });
     }
 });
-
 // Category --> "/category/:id/items"
-router.get("/:category/item-list",async (req,res)=>{
+router.get("/categories/:category",async (req,res)=>{
     const category=req.params.category;
     try{
         const list=await ProductModel.find({
@@ -44,7 +42,7 @@ router.get("/:category/item-list",async (req,res)=>{
 });
 
 // Item --> "/items/:id"
-router.get("/:category/item-list/:itemid",async (req,res)=>{
+router.get("/:itemid",async (req,res)=>{
     const itemid=req.params.itemid;
     try{
         const data=await ProductModel.findById(itemid);
@@ -62,3 +60,4 @@ router.get("/:category/item-list/:itemid",async (req,res)=>{
 });
 
 // Items --> "/items"
+//Access products without categories also

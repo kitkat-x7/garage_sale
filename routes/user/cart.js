@@ -36,9 +36,15 @@ router.get("/",async (req,res)=>{
     }
 });
 
-router.post("/add",async (req,res)=>{
-    const {itemid}=req.body;
+router.post("/:itemid",async (req,res)=>{
+    const {itemid}=req.params.itemid;
     try{
+        const item=await ProductModel.findById(itemid);
+        if(item.status==="Sold"){
+            return res.status(404).json({
+                message:"Item is out of stock"
+            });
+        }
         await CartModel.create({
             buyerid:req.userId,
             itemid,
@@ -56,7 +62,7 @@ router.post("/add",async (req,res)=>{
     }
 });
 
-router.delete("/delete/:itemid",async (req,res)=>{
+router.delete("/:itemid",async (req,res)=>{
     const itemid=req.params.itemid;
     try{
         const item=await CartModel.findOneAndDelete({

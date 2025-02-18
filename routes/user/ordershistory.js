@@ -7,22 +7,22 @@ const router=express.Router();
 const app=express();
 app.use(express.json());
 app.use(cookieparser());
-const {orderhistoryModel}=require("../../database/orders_history");
+const {orderhistoryModel}=require("../../database/orders_history.js");
 const {ProductModel}=require("../../database/product.js");
 const {verifyuser}=require("../../middlewares/verifyuser.js");
+const { identify_buyer } = require('../../class/identity_check.js');
 
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");
 router.use(verifyuser);
-
-// /users/:username/sold
-router.get("/items",async (req,res)=>{
+// TODO: RIBHAV TO REVIEW
+router.get("/",async (req,res)=>{
     try{
         const orderdata=await orderhistoryModel.find({
-            sellerid:req.userId,
+            buyerid:req.userId,
         });
         if(!orderdata){
             return res.status(200).json({
-                message:"No sold items yet!!!!!!"
+                message:"No orders yet!!!!!!"
             });
         }
         let order=[];
@@ -38,17 +38,18 @@ router.get("/items",async (req,res)=>{
     }
 });
 
-// /users/:username/sold/:soldId
-router.get("/items/:soldId",async (req,res)=>{
-    const soldId=req.params.soldId;
+
+router.get("/:orderId",async (req,res)=>{
+    const orderId=req.params.orderId;
+    const buyer=new identify_buyer(req.userId,orderId);
+    const buyer_check=buyer.check();
+    if(!(await buyer_check).valid){
+        return res.status((await buyer_check).status).json({ error: (await buyer_check).message});
+    }
     try{
         const product=await ProductModel.findOne({
-            _id:soldId,
-            sellerId:req.userId, // Is this required?
+            _id:orderId,
         });
-
-        // There should be a check that sellerId should be equal to current user id
-
         if(!product){
             return res.status(404).json({ message: "Item not found!"});
         }

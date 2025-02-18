@@ -15,7 +15,7 @@ const { UserModel } = require('../../../database/user.js');
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");
 
 router.use(verifyuser);
-router.post("/add",async (req,res)=>{
+router.post("/",async (req,res)=>{
     const date = new Date().toISOString();
     const {category,name,amount}=req.body;
     try{
@@ -42,20 +42,21 @@ router.post("/add",async (req,res)=>{
     }
 });
 
-router.patch("/update",async (req,res)=>{
-    const {category,name,amount,date}=req.body;
+router.patch("/:itemid",async (req,res)=>{
+    const itemid=req.params.orderId;
+    const {category,name,amount}=req.body;
     try{
         // Change to product model
         // This is wrong. We need to correct this.
-        const profile=await UserModel.findByIdAndUpdate(req.userId,{
+        const product=await ProductModel.findByIdAndUpdate(itemid,{
             category,
             name,
             amount,
         });
-        if(!profile){
-            return res.status(404).json({ message: "User not found"});
+        if(!product){
+            return res.status(404).json({ message: "Item not found"});
         }
-        res.json({message:"Cart Updated Successfully"});
+        res.json({message:"Item Updated Successfully"});
     }catch(err){
         console.error("Error occurred:", err);
         if (err.name === "CastError") {
@@ -65,13 +66,14 @@ router.patch("/update",async (req,res)=>{
     }
 });
 
-router.patch("/delete",async (req,res)=>{
+router.delete("/:itemid",async (req,res)=>{
+    const itemid=req.params.orderId;
     try{
-        const profile=await UserModel.findByIdAndDelete(req.userId);
+        const profile=await ProductModel.findByIdAndDelete(itemid);
         if(!profile){
-            return res.status(404).json({ message: "User not found"});
+            return res.status(404).json({ message: "Item not found"});
         }
-        res.json({message:"Cart Deleted Successfully"});
+        res.json({message:"Item Deleted Successfully"});
     }catch(err){
         console.error("Error occurred:", err);
         if (err.name === "CastError") {
@@ -81,6 +83,7 @@ router.patch("/delete",async (req,res)=>{
     }
 });
 
+// On sale Items Live
 router.get("/cart",async (req,res)=>{
     try{
         const Data=await ProductModel.find({
@@ -115,3 +118,4 @@ router.get("/cart/:saleid",async (req,res)=>{
     }
 });
 module.exports = router;
+
