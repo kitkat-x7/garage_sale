@@ -21,6 +21,10 @@ const User= new Schema({
     phone_number:{
         type:Number,
         required:true,
+    },
+    status:{
+        type:Boolean,
+        default:true,
     }
 });
 

@@ -48,10 +48,4 @@ router.get("/",async (req,res)=>{
     }
 });
 
-router.post("/order-details",(req,res)=>{
-    res.json({
-        message:"Order Details.",
-    });
-});
-
 module.exports = router;
