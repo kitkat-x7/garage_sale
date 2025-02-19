@@ -37,8 +37,9 @@ router.get("/",async (req,res)=>{
 });
 
 router.post("/:itemid",async (req,res)=>{
-    const {itemid}=req.params.itemid;
+    const itemid=req.params.itemid;
     const {count}=req.body;
+    
     try{
         const item=await ProductModel.findById(itemid);
         if(count>item.count){
@@ -56,7 +57,7 @@ router.post("/:itemid",async (req,res)=>{
             itemid,
             count,
         });
-        res.status(200).json({message:"User Sign Up Successfull."});
+        res.status(200).json({message:"Added to Cart"});
     }catch(err){
         console.error("Error occurred:", err);
         if (err.name === "ValidationError") {

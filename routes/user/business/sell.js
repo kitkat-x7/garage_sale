@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cookieparser());
 const {ProductModel}=require("../../../database/product.js");
 const {verifyuser}=require("../../../middlewares/verifyuser.js");
-const { UserModel } = require('../../../database/user.js');
+const {identify_seller}=require("../../../class/identity_check.js");
 
 
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");

@@ -11,6 +11,7 @@ const {ProductModel}=require("../../../database/product.js");
 const {CartModel}=require("../../../database/cart.js");
 const {verifyuser}=require("../../../middlewares/verifyuser.js");
 
+
 mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb.net/store");
 
 router.use(verifyuser);
@@ -25,14 +26,14 @@ router.get("/",async (req,res)=>{
                 message:"No items in the cart"
             });
         }
-        let item,count;
+        let item,c;
         const status="Sold"
         for(Id in purchase){
-            item=await ProductModel.findOne({itemid:purchase[Id]['itemid']});
-            count=item.count-purchase[Id]['count'];
-            item=await ProductModel.updateOne({itemid:purchase[Id]['itemid']},{
+            item=await ProductModel.findOne({_id:purchase[Id]['itemid']});
+            c=item.count-purchase[Id]['count'];
+            await ProductModel.updateOne({_id:purchase[Id]['itemid']},{
                 status,
-                count,
+                count:c,
             });
         }
         await CartModel.deleteMany({
