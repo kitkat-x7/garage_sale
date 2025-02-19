@@ -17,7 +17,7 @@ mongoose.connect("mongodb+srv://kaustavnag13:IAMKaustav13@cluster0.nn3tf.mongodb
 router.use(verifyuser);
 router.post("/",async (req,res)=>{
     const date = new Date().toISOString();
-    const {category,name,amount}=req.body;
+    const {category,name,amount,count}=req.body;
     try{
         await ProductModel.create({
             sellerId:req.userId,
@@ -26,6 +26,7 @@ router.post("/",async (req,res)=>{
             amount,
             date,
             status:"Live",
+            count
         });
         res.status(200).json({
             message:"Product successfully pubished for sale."
@@ -44,7 +45,7 @@ router.post("/",async (req,res)=>{
 
 router.patch("/:itemid",async (req,res)=>{
     const itemid=req.params.orderId;
-    const {category,name,amount}=req.body;
+    const {category,name,amount,count}=req.body;
     try{
         // Change to product model
         // This is wrong. We need to correct this.
@@ -52,6 +53,7 @@ router.patch("/:itemid",async (req,res)=>{
             category,
             name,
             amount,
+            count,
         });
         if(!product){
             return res.status(404).json({ message: "Item not found"});
@@ -101,10 +103,14 @@ router.get("/cart",async (req,res)=>{
 
 router.get("/cart/:saleid",async (req,res)=>{
     const saleId=req.params.saleid;
+    const seller=new identify_seller(req.userId,saleId);
+    const seller_check=seller.check();
+    if(!(await seller_check).valid){
+        return res.status((await seller_check).status).json({ error: (await seller_check).message});
+    }
     try{
         const product=await ProductModel.findOne({
             _id:saleId,
-            sellerId:req.userId,
         });
         if(!product){
             return res.status(404).json({ message: "No items are provided for sale."});

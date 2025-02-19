@@ -9,6 +9,10 @@ const Cart= new Schema({
         required:true
     },
     itemid:{type:ObjectId, required:true},
+    count:{
+        type:Number,
+        required:true
+    }
 });
 
 const CartModel = mongoose.model("Cart", Cart);

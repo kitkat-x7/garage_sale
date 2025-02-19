@@ -38,8 +38,14 @@ router.get("/",async (req,res)=>{
 
 router.post("/:itemid",async (req,res)=>{
     const {itemid}=req.params.itemid;
+    const {count}=req.body;
     try{
         const item=await ProductModel.findById(itemid);
+        if(count>item.count){
+            return res.status(404).json({
+                message:`Above the stock limit.`
+            });
+        }
         if(item.status==="Sold"){
             return res.status(404).json({
                 message:"Item is out of stock"
@@ -48,6 +54,7 @@ router.post("/:itemid",async (req,res)=>{
         await CartModel.create({
             buyerid:req.userId,
             itemid,
+            count,
         });
         res.status(200).json({message:"User Sign Up Successfull."});
     }catch(err){
@@ -62,6 +69,19 @@ router.post("/:itemid",async (req,res)=>{
     }
 });
 
+router.patch("/:itemid",async (req,res)=>{
+    const {itemid}=req.params.itemid;
+    const {count}=req.body;
+    try{
+        await CartModel.updateOne(itemid,{
+            count
+        });
+    }catch(err){
+        return res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+})
 router.delete("/:itemid",async (req,res)=>{
     const itemid=req.params.itemid;
     try{

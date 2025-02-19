@@ -43,7 +43,6 @@ router.post("/signup",async (req,res)=>{
     //     return res.status(400).json({ error: "All fields are required" });
     // }
     try{
-        console.log(useremail.email);
         const existing=await UserModel.findOne({
             email:useremail.email
         });

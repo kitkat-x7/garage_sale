@@ -25,11 +25,14 @@ router.get("/",async (req,res)=>{
                 message:"No items in the cart"
             });
         }
-        let item;
+        let item,count;
         const status="Sold"
         for(Id in purchase){
+            item=await ProductModel.findOne({itemid:purchase[Id]['itemid']});
+            count=item.count-purchase[Id]['count'];
             item=await ProductModel.updateOne({itemid:purchase[Id]['itemid']},{
                 status,
+                count,
             });
         }
         await CartModel.deleteMany({
